@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #b0c90e;
+            border-radius: 20px;
+            box-shadow: 0px 0px 10px rgba(2, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        #password {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        #generate {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #generate:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Password Generator</h1>
+    <input type="text" id="password" placeholder="Enter a sentence or phrase" />
+    <button id="generate">Generate Password</button>
+    <script>
+        const passwordInput = document.getElementById("password");
+        const generateButton = document.getElementById("generate");
+
+        generateButton.addEventListener("click", () => {
+            const userInput = passwordInput.value;
+            if (userInput.length === 0) {
+                alert("Please enter a sentence or phrase.");
+                return;
+            }
+
+            // Remove spaces from the input
+            let modifiedSentenceNoSpaces = userInput.replace(/\s/g, "");
+
+            // Remove random characters
+            const numToRemove = Math.floor(Math.random() * 3) + 1;
+            const positionsToRemove = new Array(numToRemove).fill().map(() => Math.floor(Math.random() * modifiedSentenceNoSpaces.length));
+            modifiedSentenceNoSpaces = modifiedSentenceNoSpaces.split('').filter((char, idx) => !positionsToRemove.includes(idx)).join('');
+
+            // Change random characters to uppercase
+            const numToUppercase = Math.floor(Math.random() * 4) + 1;
+            const positionsToUppercase = new Array(numToUppercase).fill().map(() => Math.floor(Math.random() * modifiedSentenceNoSpaces.length));
+            modifiedSentenceNoSpaces = modifiedSentenceNoSpaces.split('').map((char, idx) => positionsToUppercase.includes(idx) ? char.toUpperCase() : char).join('');
+
+            // Replace some common characters with character replacements
+            const replacements = {
+                'a': '@',
+                's': '$',
+                'e': '3',
+                'i': '1',
+                'o': '0',
+                't': '7',
+                'g': '9',
+                'h': '#',
+                'z': '2',
+                'b': '8'
+            };
+            const numToReplace = Math.floor(Math.random() * 3) + 1;
+            const positionsToReplace = new Array(numToReplace).fill().map(() => Math.floor(Math.random() * modifiedSentenceNoSpaces.length));
+            modifiedSentenceNoSpaces = modifiedSentenceNoSpaces.split('').map((char, idx) => replacements[char.toLowerCase()] && positionsToReplace.includes(idx) ? replacements[char.toLowerCase()] : char).join('');
+
+            passwordInput.value = modifiedSentenceNoSpaces;
+        });
+    </script>
+</body>
+</html>
